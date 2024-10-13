@@ -1,24 +1,21 @@
-# Crie um programa que simule um jogo de adivinhação de palavras.
-# O programa deve e
-# escolher aleatoriamente uma palavra de uma lista predefinida e dar ao usuário um
-# número limitado de tentativas para adivinhar. Após cada tentativa, o programa deve
-# informar quais letras estão corretas e em posição correta, e quais estão corretas mas em
-# posição errada. Implemente uma função para gerar dicas baseadas nas tentativas
-# anteriores do usuário
-
 import random
+import os
 
-def main():
+# Função para limpar o terminal
+def limpar_terminal() -> None:
+    if os.name == 'nt':  # Windows
+        os.system('cls')
+    else:  # Unix/Linux/MacOS
+        os.system('clear')
+
+def adivinhacao() -> None:
+    limpar_terminal()
     """
     Função principal do jogo de adivinhação de palavras.
     """
-
-    lista_de_palavras_possiveis = ("computação", "tecnologia", "CPU", "Processador", "computador", "software", "aplicativo", "programa", "")
+    lista_de_palavras_possiveis = ["computacao", "tecnologia", "cpu", "processador", "computador", "software", "aplicativo", "programa"]
     palavra_secreta = random.choice(lista_de_palavras_possiveis)
     tamanho_palavra = len(palavra_secreta)
-
-    print("\tBem vindo ao jogo de adivinhação de palavras!")
-    print("Deve fazer sua suposição de palavra escondida e será retornado se acertou e se não certou, quais letras acertou e em qual posição.\nUma dica, essa adivinhação é com o tema: Ciência da computação.\n Vamos lá!")
 
     tentativas = 6
     letras_corretas = []
@@ -26,14 +23,14 @@ def main():
 
     while tentativas > 0:
         print(f"Tentativas restantes: {tentativas}")
-        palavra_do_usuario = input("Digite o seu palpite para a palavra misteriosa: \n").lower()
+        palavra_do_usuario = input(f"Digite o seu palpite para a palavra misteriosa ({tamanho_palavra} letras): \n").lower()
 
         if len(palavra_do_usuario) != tamanho_palavra:
-            print("A palavra tem que ter o mesmo tamanho da palavra secreta!")
+            print(f"A palavra tem que ter {tamanho_palavra} letras!")
             continue
 
         dica = gerar_dica(palavra_secreta, palavra_do_usuario, letras_corretas, letras_erradas)
-        print(dica)
+        print(f"Dica: {dica}")
 
         if palavra_do_usuario == palavra_secreta:
             print(f"Parabéns! Você acertou a palavra secreta: {palavra_secreta}")
@@ -41,9 +38,11 @@ def main():
 
         for i, letra in enumerate(palavra_do_usuario):
             if letra == palavra_secreta[i]:
-                letras_corretas.append(letra)
+                if letra not in letras_corretas:
+                    letras_corretas.append(letra)
             elif letra in palavra_secreta and letra not in letras_corretas:
-                letras_erradas.append(letra)
+                if letra not in letras_erradas:
+                    letras_erradas.append(letra)
 
         tentativas -= 1
 
@@ -63,19 +62,33 @@ def gerar_dica(palavra_secreta, palavra_do_usuario, letras_corretas, letras_erra
     Returns:
         Uma string com a dica.
     """
-
     dica = ""
     for i, letra in enumerate(palavra_do_usuario):
         if letra == palavra_secreta[i]:
-            dica += letra
-        elif letra in letras_corretas:
-            dica += "_"  # Indica que a letra está na palavra, mas na posição errada
-        elif letra in letras_erradas:
-            dica += "!"  # Indica que a letra não está na palavra
+            dica += letra  
+        elif letra in palavra_secreta:
+            dica += "?" 
         else:
-            dica += "_"
-
+            dica += "_" 
     return dica
+
+def main():
+    limpar_terminal()
+    print("\tBem-vindo ao jogo de adivinhação de palavras!")
+    print("O tema é: Ciência da Computação.\nVamos lá!")
+    
+    while True:
+        print("\n[1] Jogar")
+        print("[2] Sair")
+        
+        escolha = input("Selecione uma opção: ")
+        if escolha == "1":
+            adivinhacao()
+        elif escolha == "2":
+            print("Obrigado por jogar!")
+            break
+        else:
+            print("Escolha inválida, tente novamente.")
 
 if __name__ == "__main__":
     main()
