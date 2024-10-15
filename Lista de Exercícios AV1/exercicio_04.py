@@ -27,8 +27,12 @@ def limpar_terminal() -> None:
 
 # Função para verificar a senha
 def verificar_senha(conta: Usuario) -> bool:
+    if not conta.habilitada:
+        print("Sua conta está bloqueada! Vá ao caixa eletrônico para desbloqueá-la.")
+        return False
+
     limpar_terminal()
-    erros = 0
+    erros: int = 0
     while erros < 3:
         senha_digitada = input("Digite sua senha da conta: ")
         if conta.senha == senha_digitada:
@@ -36,7 +40,9 @@ def verificar_senha(conta: Usuario) -> bool:
         else:
             print("Senha incorreta! Tente novamente.")
             erros += 1
-    print("Sua senha foi bloqueada! Deve ir ao caixa eletrônico para desbloqueá-la.")
+
+    print("Sua senha foi bloqueada após 3 tentativas! Vá ao caixa eletrônico para desbloqueá-la.")
+    conta.habilitada = False
     return False
 
 def cadastrarConta() -> None:
@@ -51,27 +57,44 @@ def cadastrarConta() -> None:
     print(f"Conta cadastrada com sucesso! {nova_conta}\n"
           f"Clique em \"Enter\" para voltar para o menu \n")
 
+
 def acessarAConta() -> None:
     limpar_terminal()
-    options: int = int(input("Selecione:\n"
-                             f"[1] - Realizar um depósito\n"
-                             f"[2] - Realizar um saque\n"
-                             f"[3] - Realizar uma transferência\n"
-                             f"[4] - Emitir extrato da conta\n"
-                             f"[5] - Voltar ao menu \n"))
-    match options:
-        case 1:
-            deposito()
-        case 2:
-            saque()
-        case 3:
-            transferencia()
-        case 4:
-            extrato()
-        case 5:
-            main()
-        case _:
-            exit()
+    numero_conta: str = input("Digite o número da sua conta: ")
+
+    conta = next((conta for conta in contas if conta.numero_conta == numero_conta), None)
+    
+    if conta is None:
+        print("Conta não encontrada.")
+        return
+
+    if verificar_senha(conta):
+        if not conta.habilitada:
+            print("Conta bloqueada. Vá ao caixa eletrônico para desbloqueá-la.")
+            return
+        
+        options: int = int(input("Selecione:\n"
+                                 f"[1] - Realizar um depósito\n"
+                                 f"[2] - Realizar um saque\n"
+                                 f"[3] - Realizar uma transferência\n"
+                                 f"[4] - Emitir extrato da conta\n"
+                                 f"[5] - Voltar ao menu \n"))
+        match options:
+            case 1:
+                deposito()
+            case 2:
+                saque()
+            case 3:
+                transferencia()
+            case 4:
+                extrato()
+            case 5:
+                main()
+            case _:
+                exit()
+    else:
+        print("Acesso negado.")
+
 
 def deposito() -> None:
     limpar_terminal()
