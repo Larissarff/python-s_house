@@ -1,36 +1,24 @@
 from typing import Union
 
 def is_kaprekar(number: int) -> int:
-    str_num : str = str(number)  # tratando de int para string pra separação
-    tamanho : int = len(str_num)  # mapeando tamanho
+    string_number : str = str(number)
+    tamanho_numero : int = len(string_number)
+    tamanho_metade: int = tamanho_numero // 2
 
-    # Loop para dividir o número em duas partes
-    for i in range(1, tamanho):
-        # Arrumar um jeito de dividir no meio numero da string, se for ímpar, vai +1 pra esquerda
+    inicio : str = string_number[:tamanho_metade]
+    final : str = string_number[tamanho_metade:]
 
-        If tamanho % 2 == 0:
-            str_num.Split() = left_part # dividir no meio exato e distribuir metade para cada variavel ???
+    inicio_int : int = int(inicio)
+    final_int : int = int(final)
 
-        Else:
-            # dividir no meio sendo +1 pra esquerda
+    soma_numero : int = inicio_int + final_int
+    sqr_soma : int = soma_numero ** 2
 
-        # left_part : int = Parte da esquerda
-        # right_part : int = Parte da direita
+    if sqr_soma == number:
+        return 1
 
-        # Conversão de tipo para int novamente
-        # left_part = passando de string pra int denovo
-        # right_part = passando de string pra int denovo
-
-        # Soma variáveis
-        combined_sum : int = left_part + right_part
-
-        # Verificação se o quadrado da soma é igual ao número original
-        squared_sum = combined_sum * combined_sum
-        if squared_sum == number:
-            return 1
-
-    return 0  # Retorna 0 caso contrário, se nenhuma condição for satisfeita
-
+    return 0
+      # Retorna 0 caso contrário, se nenhuma condição for satisfeita
 
 def main() -> None:
 
