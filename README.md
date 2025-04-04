@@ -3,7 +3,7 @@ Repositório para guardar meus estudos e práticas em python obtidos no segundo 
 
 Cursos feitos:
 Linguagem de Programação Python (Básico) - Fundação Bradesco (18h) 100% ✔️
-Fundamentos de Linguagem Python Para Análise de Dados e Data Science (72h) 30% ✔️
+Fundamentos de Linguagem Python Para Análise de Dados e Data Science (72h) 32% ✔️
 
 Meu repositório com a Calculadora com Interface que fiz em Python utilizando tkinter 🖩:
 
